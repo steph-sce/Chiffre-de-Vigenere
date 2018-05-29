@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Le chiffre de Vigenère</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif
+        }
+
+        b {
+            color: #57f
+        }
+
+        blockquote {
+            font-family: Courier New, Courier, monospace;
+            font-size: 18px
+        }
+
+        hr {
+            margin: 20px 0
+        }
+
+        h3 {
+            color: #49808E
+        }
+
+        span {
+            font-family: monospace;
+            font-size: 16px
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Le chiffre de Vigenère</h2>
+    <p>C’est le moment de montrer au Club du chiffre vos capacités en algorithmie !
+        <br> Un concours national est lancé et le club présentant la meilleur implémentation sera nommé “chiffre de France”
+        <br>
+        <br> L’épreuve : implémenter le chiffre de Vigenère afin de pouvoir facilement utilisé ce système de cryptage multi alphabétique
+        puissant.
+        <br>
+        <br>
+        <a href="https://fr.wikipedia.org/wiki/Chiffre_de_Vigen%C3%A8re" target="_blank">Le chiffre de Vigenère</a>
+        <br>
+        <br> Pour vous aider, voici le résultat que vous devez obtenir abec la clé donnée :
+        <br>
+        <br>
+        <span>p makxmoaiurfm hmivivl xxzr eqakb gmyyq dmb pm eikbam pm eikhwbptr gwzex yv qsv vfxwbvqiodx qivw rnetma psuzw nrm
+            psvgjtmvgi xrfbftr</span>
+        <hr>
+        <b>Développez le code qui permet, à partir d'une clé, d'afficher le message crypté avec le chiffre de Vigenère</b>
+        <br>
+        <br>
+    </p>
+    <script>
+
+        const message = "l enseignement devrait etre ainsi celui qui le recoit le recueille comme un don inestimable mais jamais comme une contrainte penible";
+        const secret_key = "einstein";
+
+
+        let message_crypted = "",
+            alphabet = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
+            letter = "",
+            key_pos = 0;
+
+        const nb_letter = message.length;
+
+        // array_key sera notre clé répétée permettant le chiffrement
+        // On utilise ici un hack pour faire une vrai copie de secret_key
+        let array_key = (' ' + secret_key).slice(1).split('');
+
+        // on va passer en revue chaque lettre du message en clair
+        for (let j = 0; j < nb_letter; j++) {
+
+            // on stock la lettre en clair
+            letter = message.charAt(j);
+
+            // si c'est un espace, on passe à la lettre suivante
+            if (letter == " ") {
+                message_crypted += letter;
+                continue;
+            }
+
+            // on récupére la lettre de la clé secrete
+            letter_key = array_key.shift();
+
+            // si c'était la dernière lettre, en remet la clé originelle pour boucler.
+            if (array_key.length == 0) array_key = (' ' + secret_key).slice(1).split('');
+
+            // C'est ici que l'on fait la correspondance :
+            // On calcul la position de la lettre en additionnant la position de la lettre en clair et la position de la lettre de la clé
+            let position = alphabet.indexOf(letter) + alphabet.indexOf(letter_key);
+            message_crypted += alphabet.charAt(position);
+        }
+
+        document.write(`<h3>Message encrypté avec la clé ${secret_key} : ${message_crypted} </h3>`);
+    </script>
+</body>
+
+</html>
