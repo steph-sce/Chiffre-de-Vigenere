@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Le chiffre de Vigenère</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif
+        }
+
+        b {
+            color: #57f
+        }
+
+        blockquote {
+            font-family: Courier New, Courier, monospace;
+            font-size: 18px
+        }
+
+        hr {
+            margin: 20px 0
+        }
+
+        h3 {
+            color: #49808E
+        }
+
+        span {
+            font-family: monospace;
+            font-size: 16px
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Le chiffre de Vigenère</h2>
+    <p>C’est le moment de montrer au Club du chiffre vos capacités en algorithmie !
+        <br> Un concours national est lancé et le club présentant la meilleur implémentation sera nommé “chiffre de France”
+        <br>
+        <br> L’épreuve : implémenter le chiffre de Vigenère afin de pouvoir facilement utilisé ce système de cryptage multi alphabétique
+        puissant.
+        <br>
+        <br>
+        <a href="https://fr.wikipedia.org/wiki/Chiffre_de_Vigen%C3%A8re" target="_blank">Le chiffre de Vigenère</a>
+        <hr>
+        <b>Développez le code qui permet, à partir d'une clé, d'afficher le message crypté avec le chiffre de Vigenère</b>
+
+        <form action="#" method="get" onsubmit="return false">
+            <table class="noborder">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="text">Text:</label>
+                        </td>
+                        <td>
+                            <textarea id="text" cols="50" rows="10" style="width:40em; height:15em">Votre texte</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="key">Key:</label>
+                        </td>
+                        <td>
+                            <input type="text" value="abc" id="key" style="width:10em;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="button" value="Encrypt" onclick="doCrypt(false)" />
+                            <input type="button" value="Decrypt" onclick="doCrypt(true)" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+    </p>
+    <script>
+
+        const message = "l enseignement devrait etre ainsi celui qui le recoit le recueille comme un don inestimable mais jamais comme une contrainte penible";
+        const secret_key = "einstein";
+
+        document.write(`<h3>Message encrypté avec la clé x : </h3>` + message);
+        document.write(`<h4>La clé x : </h4>` + secret_key);
+
+        // écrivez votre code ici
+
+        function doCrypt(isDecrypt) {
+            if (document.getElementById("key").value.length == 0) {
+                alert("Key is empty");
+                return;
+            }
+            var key = filterKey(document.getElementById("key").value);
+            if (key.length == 0) {
+                alert("Key has no letters");
+                return;
+            }
+            if (isDecrypt) {
+                for (var i = 0; i < key.length; i++)
+                    key[i] = (26 - key[i]) % 26;
+            }
+            var textElem = document.getElementById("text");
+            textElem.value = crypt(textElem.value, key);
+        }
+
+        function crypt(input, key) {
+            var output = "";
+            for (var i = 0, j = 0; i < input.length; i++) {
+                var c = input.charCodeAt(i);
+                if (isUppercase(c)) {
+                    output += String.fromCharCode((c - 65 + key[j % key.length]) % 26 + 65);
+                    j++;
+                } else if (isLowercase(c)) {
+                    output += String.fromCharCode((c - 97 + key[j % key.length]) % 26 + 97);
+                    j++;
+                } else {
+                    output += input.charAt(i);
+                }
+            }
+            return output;
+        }
+
+        function filterKey(key) {
+            var result = [];
+            for (var i = 0; i < key.length; i++) {
+                var c = key.charCodeAt(i);
+                if (isLetter(c))
+                    result.push((c - 65) % 32);
+            }
+            return result;
+        }
+
+
+        function isLetter(c) {
+            return isUppercase(c) || isLowercase(c);
+        }
+
+        function isUppercase(c) {
+            return 65 <= c && c <= 90;
+        }
+
+        function isLowercase(c) {
+            return 97 <= c && c <= 122;  
+        }
+    </script>
+</body>
+
+</html>
